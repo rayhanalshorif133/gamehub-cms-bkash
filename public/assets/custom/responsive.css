@@ -1,0 +1,26 @@
+@media only screen and (max-width: 320px) {
+    .item_container div {
+        margin-bottom: 10px;
+    }
+}
+
+
+
+@media only screen and (min-width: 768px) {}
+
+/* 993 */
+@media only screen and (min-width: 993px) {
+    .mobile_footer {
+        display: none !important;
+    }
+
+    .item_menu .title {
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 0px;
+        border-bottom: 2px solid #003739;
+        font-size: 1.8rem;
+        text-align: left;
+        align-items: left;
+        padding-left: 10px;
+    }
+}

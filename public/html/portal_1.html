@@ -1,0 +1,679 @@
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: var(--font-sans);
+  }
+
+  .app {
+    max-width: 390px;
+    margin: 0 auto;
+    background: #0a0a12;
+    min-height: 900px;
+    position: relative;
+    overflow: hidden;
+    color: #fff;
+  }
+
+  .header {
+    padding: 20px 20px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+
+  .logo span {
+    color: #8b5cf6;
+  }
+
+  .avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .notif-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .hero {
+    margin: 0 16px 20px;
+    background: rgba(139, 92, 246, 0.15);
+    border: 0.5px solid rgba(139, 92, 246, 0.4);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #a78bfa;
+    margin-bottom: 6px;
+  }
+
+  .hero-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 16px;
+  }
+
+  .hero-row {
+    display: flex;
+    gap: 8px;
+  }
+
+  .hero-stat {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    padding: 8px 12px;
+    text-align: center;
+    flex: 1;
+  }
+
+  .hero-stat .val {
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .hero-stat .lbl {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 1px;
+  }
+
+  .hero-prize {
+    color: #fbbf24;
+  }
+
+  .hero-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(251, 191, 36, 0.15);
+    border: 0.5px solid rgba(251, 191, 36, 0.4);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: #fbbf24;
+  }
+
+  .join-btn {
+    width: 100%;
+    margin-top: 14px;
+    background: #8b5cf6;
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    padding: 11px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .section-header {
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .see-all {
+    font-size: 12px;
+    color: #8b5cf6;
+    cursor: pointer;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 6px;
+    padding: 0 20px;
+    margin-bottom: 16px;
+  }
+
+  .tab {
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    cursor: pointer;
+    border: 0.5px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.5);
+    background: transparent;
+    transition: all 0.2s;
+  }
+
+  .tab.active {
+    background: #8b5cf6;
+    border-color: #8b5cf6;
+    color: #fff;
+  }
+
+  .tournaments {
+    padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .t-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 0.5px solid rgba(255, 255, 255, 0.08);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .t-card.hot {
+    border-color: rgba(239, 68, 68, 0.35);
+  }
+
+  .t-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .t-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .t-name {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .t-meta {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 6px;
+  }
+
+  .t-tags {
+    display: flex;
+    gap: 5px;
+  }
+
+  .tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  .tag-live {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 0.5px solid rgba(239, 68, 68, 0.3);
+  }
+
+  .tag-daily {
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    border: 0.5px solid rgba(99, 102, 241, 0.3);
+  }
+
+  .tag-weekly {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 0.5px solid rgba(245, 158, 11, 0.3);
+  }
+
+  .tag-monthly {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 0.5px solid rgba(16, 185, 129, 0.3);
+  }
+
+  .t-right {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .t-prize {
+    font-size: 13px;
+    font-weight: 500;
+    color: #fbbf24;
+  }
+
+  .t-spots {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 2px;
+  }
+
+  .leaderboard {
+    margin: 20px 16px 0;
+    background: rgba(255, 255, 255, 0.03);
+    border: 0.5px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .lb-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 0.5px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .lb-row:last-child {
+    border-bottom: none;
+  }
+
+  .lb-rank {
+    font-size: 13px;
+    font-weight: 500;
+    width: 20px;
+    color: rgba(255, 255, 255, 0.3);
+  }
+
+  .lb-rank.gold {
+    color: #fbbf24;
+  }
+
+  .lb-rank.silver {
+    color: #d1d5db;
+  }
+
+  .lb-rank.bronze {
+    color: #d97706;
+  }
+
+  .lb-av {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  .lb-name {
+    flex: 1;
+    font-size: 13px;
+  }
+
+  .lb-score {
+    font-size: 12px;
+    color: #a78bfa;
+  }
+
+  .lb-xp {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 1px;
+    text-align: right;
+  }
+
+  .bottom-nav {
+    position: sticky;
+    bottom: 0;
+    background: rgba(10, 10, 18, 0.95);
+    border-top: 0.5px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 0 14px;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 24px;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+
+  .nav-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+  }
+
+  .nav-label {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .nav-item.active .nav-label {
+    color: #8b5cf6;
+  }
+
+  .nav-item.active .nav-icon {
+    background: rgba(139, 92, 246, 0.15);
+  }
+
+  .countdown {
+    font-size: 11px;
+    color: #f87171;
+    margin-top: 3px;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    margin-top: 6px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: #8b5cf6;
+    border-radius: 2px;
+  }
+
+  .section-gap {
+    margin-top: 22px;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ef4444;
+    display: inline-block;
+    margin-right: 4px;
+    animation: pulse 1.5s infinite;
+  }
+
+  @keyframes pulse {
+
+    0%,
+    100% {
+      opacity: 1
+    }
+
+    50% {
+      opacity: 0.3
+    }
+  }
+</style>
+
+
+<div class="app">
+  <div class="header">
+    <div class="logo">Game<span>Arena</span></div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div class="notif-btn" onclick="sendPrompt('Show me my notifications')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+        </svg>
+      </div>
+      <div class="avatar" onclick="sendPrompt('Show my profile and stats')">AR</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="hero-badge">🔥 Hot</div>
+    <div class="hero-label">Featured tournament</div>
+    <div class="hero-title">World Cup Sprint</div>
+    <div class="hero-sub">Top players compete live now</div>
+    <div class="hero-row">
+      <div class="hero-stat">
+        <div class="val hero-prize">$500</div>
+        <div class="lbl">Prize pool</div>
+      </div>
+      <div class="hero-stat">
+        <div class="val">128</div>
+        <div class="lbl">Players</div>
+      </div>
+      <div class="hero-stat">
+        <div class="val" style="color:#f87171;">02:14:38</div>
+        <div class="lbl">Ends in</div>
+      </div>
+    </div>
+    <button class="join-btn" onclick="sendPrompt('Join the World Cup Sprint tournament')">Join now — Free entry</button>
+  </div>
+
+  <div class="section-gap"></div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="filterTournaments('all', this)">All</div>
+    <div class="tab" onclick="filterTournaments('daily', this)">Daily</div>
+    <div class="tab" onclick="filterTournaments('weekly', this)">Weekly</div>
+    <div class="tab" onclick="filterTournaments('monthly', this)">Monthly</div>
+  </div>
+
+  <div class="section-header" style="margin-bottom:8px;">
+    <div class="section-title">Tournaments</div>
+    <div class="see-all" onclick="sendPrompt('Show all tournaments')">See all</div>
+  </div>
+
+  <div class="tournaments" id="tournament-list">
+    <div class="t-card hot" data-type="daily" onclick="sendPrompt('Show details for Blitz Royale tournament')">
+      <div class="t-icon" style="background:rgba(239,68,68,0.12);">🎮</div>
+      <div class="t-info">
+        <div class="t-name">Blitz Royale</div>
+        <div class="t-meta"><span class="live-dot"></span>Live · 64 players</div>
+        <div class="t-tags"><span class="tag tag-live">Live</span><span class="tag tag-daily">Daily</span></div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:72%"></div>
+        </div>
+      </div>
+      <div class="t-right">
+        <div class="t-prize">$50</div>
+        <div class="t-spots">28 spots left</div>
+      </div>
+    </div>
+
+    <div class="t-card" data-type="weekly" onclick="sendPrompt('Show details for Friday Night Finals tournament')">
+      <div class="t-icon" style="background:rgba(245,158,11,0.12);">⚔️</div>
+      <div class="t-info">
+        <div class="t-name">Friday Night Finals</div>
+        <div class="t-meta">Starts in 3h · 200 players</div>
+        <div class="t-tags"><span class="tag tag-weekly">Weekly</span></div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:40%;background:#fbbf24;"></div>
+        </div>
+      </div>
+      <div class="t-right">
+        <div class="t-prize">$200</div>
+        <div class="t-spots">82 spots left</div>
+      </div>
+    </div>
+
+    <div class="t-card" data-type="daily" onclick="sendPrompt('Show details for Speed Run Cup tournament')">
+      <div class="t-icon" style="background:rgba(99,102,241,0.12);">🏁</div>
+      <div class="t-info">
+        <div class="t-name">Speed Run Cup</div>
+        <div class="t-meta">Starts in 6h · 32 players</div>
+        <div class="t-tags"><span class="tag tag-daily">Daily</span></div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:20%;background:#818cf8;"></div>
+        </div>
+      </div>
+      <div class="t-right">
+        <div class="t-prize">$30</div>
+        <div class="t-spots">14 spots left</div>
+      </div>
+    </div>
+
+    <div class="t-card" data-type="monthly" onclick="sendPrompt('Show details for Grand Championship tournament')">
+      <div class="t-icon" style="background:rgba(16,185,129,0.12);">👑</div>
+      <div class="t-info">
+        <div class="t-name">Grand Championship</div>
+        <div class="t-meta">April 28 · 512 players</div>
+        <div class="t-tags"><span class="tag tag-monthly">Monthly</span></div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:55%;background:#34d399;"></div>
+        </div>
+      </div>
+      <div class="t-right">
+        <div class="t-prize">$2,000</div>
+        <div class="t-spots">180 spots left</div>
+      </div>
+    </div>
+
+    <div class="t-card" data-type="weekly" onclick="sendPrompt('Show details for Ranked Showdown tournament')">
+      <div class="t-icon" style="background:rgba(139,92,246,0.12);">🎯</div>
+      <div class="t-info">
+        <div class="t-name">Ranked Showdown</div>
+        <div class="t-meta">Tomorrow · 128 players</div>
+        <div class="t-tags"><span class="tag tag-weekly">Weekly</span></div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:30%;background:#a78bfa;"></div>
+        </div>
+      </div>
+      <div class="t-right">
+        <div class="t-prize">$150</div>
+        <div class="t-spots">96 spots left</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-gap"></div>
+
+  <div class="section-header">
+    <div class="section-title">Top players this week</div>
+    <div class="see-all" onclick="sendPrompt('Show full leaderboard')">Full board</div>
+  </div>
+
+  <div class="leaderboard">
+    <div class="lb-row">
+      <div class="lb-rank gold">1</div>
+      <div class="lb-av" style="background:rgba(251,191,36,0.2);color:#fbbf24;">ZK</div>
+      <div class="lb-name" style="font-size:13px;">ZeroKing<span
+          style="font-size:10px;color:rgba(255,255,255,0.3);margin-left:5px;">🏆 x4</span></div>
+      <div>
+        <div class="lb-score">9,840 pts</div>
+        <div class="lb-xp">+320 XP today</div>
+      </div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank silver">2</div>
+      <div class="lb-av" style="background:rgba(209,213,219,0.15);color:#d1d5db;">NX</div>
+      <div class="lb-name">NightXR<span style="font-size:10px;color:rgba(255,255,255,0.3);margin-left:5px;">🏆 x2</span>
+      </div>
+      <div>
+        <div class="lb-score">8,210 pts</div>
+        <div class="lb-xp">+180 XP today</div>
+      </div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank bronze">3</div>
+      <div class="lb-av" style="background:rgba(217,119,6,0.2);color:#d97706;">AR</div>
+      <div class="lb-name" style="color:#a78bfa;">AzureRift <span style="font-size:10px;color:rgba(167,139,250,0.5);">·
+          you</span></div>
+      <div>
+        <div class="lb-score">7,650 pts</div>
+        <div class="lb-xp">+420 XP today</div>
+      </div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank">4</div>
+      <div class="lb-av" style="background:rgba(99,102,241,0.15);color:#818cf8;">PX</div>
+      <div class="lb-name">PixelWraith</div>
+      <div>
+        <div class="lb-score">6,990 pts</div>
+        <div class="lb-xp">+90 XP today</div>
+      </div>
+    </div>
+    <div class="lb-row">
+      <div class="lb-rank">5</div>
+      <div class="lb-av" style="background:rgba(16,185,129,0.12);color:#34d399;">SL</div>
+      <div class="lb-name">StormLancer</div>
+      <div>
+        <div class="lb-score">6,120 pts</div>
+        <div class="lb-xp">+55 XP today</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="nav-item active">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label" style="color:#8b5cf6;">Home</div>
+    </div>
+    <div class="nav-item" onclick="sendPrompt('Show all tournaments page')">
+      <div class="nav-icon">🏆</div>
+      <div class="nav-label">Tournaments</div>
+    </div>
+    <div class="nav-item" onclick="sendPrompt('Show my games and match history')">
+      <div class="nav-icon">🎮</div>
+      <div class="nav-label">Games</div>
+    </div>
+    <div class="nav-item" onclick="sendPrompt('Show leaderboard page')">
+      <div class="nav-icon">📊</div>
+      <div class="nav-label">Ranks</div>
+    </div>
+    <div class="nav-item" onclick="sendPrompt('Show my wallet and earnings')">
+      <div class="nav-icon">💰</div>
+      <div class="nav-label">Wallet</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function filterTournaments(type, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.querySelectorAll('.t-card').forEach(card => {
+      if (type === 'all' || card.dataset.type === type) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script>

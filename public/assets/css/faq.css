@@ -1,0 +1,58 @@
+
+
+#faq-panel {
+    padding: 0px;
+    background-size: cover;
+    /*background-color: #005bbd;*/
+    border-radius: 0 0 15px 15px;
+    height: 10rem;
+    /* width: 33%; */
+    margin: 0 auto;
+}
+
+.faq-top-panel{
+    background: rgb(211,65,116);
+background: linear-gradient(90deg, rgba(211,65,116,1) 0%, rgba(244,166,97,1) 100%);
+}
+
+#faq-panel .card {
+    border-radius: 10px 10px 10px 10px;
+    background-color: #e8e8e8;
+}
+
+#faq-panel .card .card-body.text-center {
+    background: #007F5F;
+
+    border-radius: 10px 10px 10px 10px;
+}
+
+#faq-panel .left-postion {
+    padding-right: 7px;
+    padding-left: 0px;
+    margin-top: 15px;
+}
+
+
+
+#faq-panel  .card{
+    border: none;
+    margin-bottom: 1%;
+}
+#faq-panel .card-body {
+    padding: 1.5%;
+}
+
+#faq-panel .btn-link:hover{
+    color: rgb(211,65,116);
+}
+#faq-panel .btn-link {
+    font-weight: 600;
+    color: #000;
+    text-decoration: none;
+}
+
+/* ========================== */
+
+
+/* ================================Custom Responsive ============================= */
+

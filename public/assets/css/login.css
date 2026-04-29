@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans', sans-serif;
+    background: #201b2c;
+}
+
+body * {
+    box-sizing: border-box;
+}
+
+.main-login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    width: 90%;
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #2f2841;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0px 10px 40px #00000056;
+    width: 100%;
+}
+
+.card-login > h1 {
+    color: #00ff88;
+    font-weight: 800;
+    margin: 0 0 1rem 0;
+}
+
+.textfield {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.textfield > input {
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    background: #514869;
+    color: #f0ffffde;
+    font-size: 12px;
+    box-shadow: 0px 10px 40px #00000056;
+    outline: none;
+    width: 100%;
+}
+
+.textfield > input::placeholder {
+    color: #f0ffff94;
+}
+
+.textfield > label {
+    color: #f0ffffde;
+    margin-bottom: 10px;
+}
+
+.btn-login {
+    width: 100%;
+    padding: 16px 0;
+    margin: 25px 0 0 0;
+    border: none;
+    text-transform: uppercase;
+    border-radius: 8px;
+    outline: none;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #2b134b;
+    background: #00ff88;
+    cursor: pointer;
+    box-shadow: 0px 10px 40px -12px #00ff8052;
+}
+
+@media (max-width: 768px) {
+    .card-login {
+        padding: 1.5rem;
+    }
+
+    .textfield > input {
+        font-size: 14px;
+        padding: 12px;
+    }
+
+    .btn-login {
+        padding: 14px 0;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card-login {
+        padding: 1rem;
+    }
+
+    .card-login > h1 {
+        font-size: 20px;
+    }
+
+    .textfield > input {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .btn-login {
+        padding: 12px 0;
+        font-size: 12px;
+    }
+}

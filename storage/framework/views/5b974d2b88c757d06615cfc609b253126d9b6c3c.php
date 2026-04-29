@@ -1,0 +1,1 @@
+<?php /**PATH /var/www/bdg.b2mwap.com/resources/views/_partials/web_footer.blade.php ENDPATH**/ ?>

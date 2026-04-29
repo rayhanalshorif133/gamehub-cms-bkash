@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="favicon.ico">
+
+  <title>Category</title>
+  <!-- Bootstrap core CSS -->
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@200;300;400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+    rel="stylesheet">
+  <!-- icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> -->
+
+  <!-- Custom styles for this template -->
+  <link href="assets/dist/animate/animate.min.css" rel="stylesheet">
+
+  <link href="assets/dist/ionicons/css/ionicons.css" rel="stylesheet">
+  <link href="assets/dist/owlcarousel/assets/owl.carousel.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide@latest/dist/css/lucide.css">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest"></script>
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <style>
+    .movie-card {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      /* Space between inline-block elements */
+      margin-top: 1.1vh;
+      background-color: #efefef;
+      padding: 1.5% 1.2%;
+    }
+
+
+
+    .card-text,
+    .view-gmae {
+      display: inline-block;
+      /* Ensures elements are inline-block */
+      margin: 0;
+      text-align: center;
+      padding: 5px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <style>
+    /* ===================== */
+
+    #section_one {
+      /* padding: 3rem 0rem 1rem 0rem; */
+    }
+
+    #section_one .game-carousel,
+    #section_two .game-carousel {
+      padding: 0px;
+      ;
+    }
+
+    #section_one .two_carousel,
+    #section_two .two_carousel {
+      padding: 0px;
+    }
+
+    #section_two .card-body {
+      padding: 0px;
+    }
+
+    div#three_carousel {
+      margin-bottom: 12vh;
+      margin-top: 2vh;
+    }
+
+    .play-gmae-name {
+      text-align: center;
+      font-size: 1rem;
+
+      text-align: center;
+      margin-bottom: 0rem;
+      background-color: red;
+      overflow: hidden;
+      height: 4vh;
+    }
+
+    .play-gmae-name a {
+      color: #fff;
+    }
+
+    .section-title {
+      font-size: 1.875rem;
+      font-weight: bold;
+      color: #1f2937;
+      text-align: center;
+      margin-bottom: 1rem;
+      padding-top: 3vh;
+    }
+
+    .game-carousel {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+
+    @media (min-width: 768px) {
+      .game-carousel {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .game-carousel {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .game-card {
+      background-color: white;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .game-card:hover {
+      transform: scale(1.05);
+    }
+
+    .image-container {
+      position: relative;
+      aspect-ratio: 16/9;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card-content {
+      /* padding: 1rem; */
+      background-color: #efef;
+    }
+
+    .game-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .game-title a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.2s ease;
+    }
+
+    .game-title a:hover {
+      color: #2563eb;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #4b5563;
+    }
+
+    .players,
+    .countdown {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .players svg,
+    .countdown svg {
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .countdown.expired {
+      color: #ef4444;
+      font-weight: 500;
+    }
+
+    .timer {
+      display: flex;
+      gap: 0.25rem;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+    }
+
+    #banner .owl-nav,
+    #banner .owl-dots {
+      display: none !important;
+    }
+
+    /* ========================== Navigation ========================== */
+
+
+    #category-part {
+      position: relative;
+    }
+
+    .custom-nav {
+      position: absolute;
+      top: 55%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      z-index: 10;
+    }
+
+    .custom-prev,
+    .custom-next {
+      background-color: #fff;
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      color: #333;
+      cursor: pointer;
+      height: 40px;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 768px) {
+
+      .custom-nav {
+
+        width: 96%;
+
+      }
+    }
+
+    @media (max-width: 480px) {
+      .custom-nav {
+
+        width: 93%;
+
+      }
+    }
+
+    .custom-prev:hover,
+    .custom-next:hover {
+      background-color: #333;
+      color: #fff;
+    }
+
+    .custom-prev {
+      position: absolute;
+      left: -20px;
+    }
+
+    .custom-next {
+      position: absolute;
+      right: 0px;
+    }
+
+    /* ------------------ */
+    .all-games-part {
+      display: grid;
+
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .all-games-part {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  </style>
+  <div class="container mt-3" id="search">
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center">
+        <input type="text" class="form-control" placeholder="Search Game ...">
+      </div>
+    </div>
+  </div>
+
+
+  <main role="main">
+    <section id="category-part">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="section-title">Category</h1>
+            <div class="custom-nav">
+              <button class="custom-prev"><i class="fas fa-chevron-left"></i></button>
+              <button class="custom-next"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="owl-carousel owl-theme one-by-one">
+              <div class="item">
+                <img src="assets/images/cat-image.jpg" alt="" class="img img-fluid" />
+              </div>
+              <div class="item">
+                <img src="assets/images/cat-image1.jpg" alt="" class="img img-fluid" />
+              </div>
+              <div class="item">
+                <img src="assets/images/cat-image2.jpg" alt="" class="img img-fluid" />
+              </div>
+              <div class="item">
+                <img src="assets/images/cat-image1.jpg" alt="" class="img img-fluid" />
+              </div>
+              <div class="item">
+                <img src="assets/images/cat-image.jpg" alt="" class="img img-fluid" />
+              </div>
+              <div class="item">
+                <img src="assets/images/cat-image1.jpg" alt="" class="img img-fluid" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!--/ All Game   /-->
+    <section id="section_two" class="mb-4">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1 class="section-title">All Games</h1>
+          </div>
+          <div class="col-12">
+
+            <div class="all-games-part" style="margin-bottom: 10vh;">
+
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game1.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game2.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game1.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game3.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game2.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game1.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game1.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game1.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game3.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game1.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game2.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+              <div class="card-box-a card-shadow">
+                <div class="card-body">
+                  <a href="">
+                    <img class="card-img-top cover img-responsive" src="assets/images/game1.jpg" alt="Card image cap ">
+                  </a>
+                </div>
+                <div class="play-gmae-name">
+                  <a href="" class="card-text text-left"> <i class="fas fa-play"></i> Name one</a>
+                </div>
+              </div>
+
+
+            </div>
+
+
+          </div>
+
+
+
+
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div class="container">
+    <div class="row ">
+      <div class="col-md-12">
+        <footer id="footer-menu-panel">
+          <nav class="navbar-expand fixed-bottom">
+            <ul class="navbar footer-body">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="tournament.html">
+                  <!-- <i class="fas fa-chess fa-2x"></i> -->
+                  <span class="material-symbols-outlined" style="font-size: 2rem;">
+                    emoji_events
+                  </span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="index.html">
+                  <i class="fas fa-home fa-2x"></i>
+                </a>
+              </li>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="account.html">
+                  <i class="fas fa-user fa-2x"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+
+        </footer>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Bootstrap core JavaScript
+    ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script> -->
+
+  <script src="assets/dist/owlcarousel/owl.carousel.js"></script>
+  <script src="assets/dist/scrollreveal/scrollreveal.min.js"></script>
+  <script src="assets/js/main.js"></script>
+
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      const owl = $('.one-by-one');
+      owl.owlCarousel({
+        rtl: true,
+        loop: true,
+        margin: 10,
+        nav: false,
+        responsive: {
+          0: {
+            items: 3
+          },
+          600: {
+            items: 3
+          },
+          1000: {
+            items: 4
+          }
+        }
+      });
+
+      // Custom Navigation
+      $('.custom-prev').click(function () {
+        owl.trigger('prev.owl.carousel');
+      });
+
+      $('.custom-next').click(function () {
+        owl.trigger('next.owl.carousel');
+      });
+    });
+
+    // --load more game
+
+  </script>
+</body>
+
+</html>
