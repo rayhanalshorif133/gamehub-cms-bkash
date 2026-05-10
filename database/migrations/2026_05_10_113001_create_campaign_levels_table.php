@@ -15,14 +15,12 @@ return new class extends Migration
     {
         Schema::create('campaign_levels', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('campaign_id')->constrained('campaigns')->onDelete('cascade');
+            $table->foreignId('campaign_id')->constrained('campaigns');
             $table->integer('level_number');
             $table->foreignId('game_id')->nullable(); // Level based game selection
             $table->foreignId('prize_id')->nullable(); // Level based prize selection
             $table->date('start_date')->nullable();
-            $table->time('start_time')->nullable();
             $table->date('end_date')->nullable();
-            $table->time('end_time')->nullable();
             $table->timestamps();
         });
     }

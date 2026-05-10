@@ -56,6 +56,7 @@
 
         <?php echo $__env->make('campaign.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
         <?php echo $__env->make('campaign.update', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php echo $__env->make('campaign.show', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     </div>
 
@@ -171,6 +172,9 @@
                         render: function(data, type, row) {
                             const btns =
                                 `
+                                <button type="button" class="btn btn-sm btn-success" title="Show" onClick="showCampaign(${row.id})">
+                                    <i class='bx bx-show'></i>
+                                </button>
                                 <button type="button" class="btn btn-sm btn-info" title="Clone" onClick="cloneCampaign(${row.id})">
                                     <i class='bx bx-copy'></i>
                                 </button>
@@ -251,6 +255,49 @@
             updateCampains.show();
         };
 
+        const showCampaignModal = new bootstrap.Modal(document.getElementById('showCampaignModal'));
+        const showCampaign = (id) => {
+            axios.get(`/campaign/${id}/fetch`)
+                .then((response) => {
+                    const data = response.data.data;
+                    console.log(data);
+                    $('#show_campaignName').text(data.name);
+                    $('#show_campaignAmount').text(data.amount);
+                    $('#show_campaignDescription').text(data.description);
+
+                    const startDateTime = moment(data.start_date).format('DD-MM-YYYY');
+                    $('#show_startDateTime').text(startDateTime);
+
+                    const endDateTime = moment(data.end_date).format('DD-MM-YYYY');
+                    $('#show_endDateTime').text(endDateTime);
+
+                    $('#show_campaignStatus').text(data.status == 1 ? 'Active' : 'Inactive');
+                    $('#show_campaignGame').text(data.game ? data.game.title : 'N/A');
+
+                    // Populate levels
+                    let levelsHtml = '';
+                    if (data.levels && data.levels.length > 0) {
+                        data.levels.forEach(level => {
+                            levelsHtml += `
+                                <div class="border p-2 mb-2 col-md-3">
+                                    <strong>Level ${level.level_number}</strong><br>
+                                    Game: ${level.game_title ? level.game_title : 'N/A'}<br>
+                                    Prize: ${level.prize ? level.prize.title : 'N/A'}<br>
+                                    Start: ${moment(level.start_date).format('DD-MM-YYYY')}<br>
+                                    End: ${moment(level.end_date).format('DD-MM-YYYY')}
+                                </div>
+                            `;
+                        });
+                    } else {
+                        levelsHtml = '<p>No levels found.</p>';
+                    }
+                    $('#show_campaignLevels').html(levelsHtml);
+                })
+                .catch(error => console.error('Error fetching campaign:', error));
+
+            showCampaignModal.show();
+        };
+
         const cloneCampaign = (id) => {
             Swal.fire({
                 title: 'Are you sure?',
@@ -279,6 +326,10 @@
 
         $(".closeUpdateCampainsModal").click(() => {
             updateCampains.hide();
+        });
+
+        $(".closeShowCampainsModal").click(() => {
+            showCampaignModal.hide();
         });
 
 

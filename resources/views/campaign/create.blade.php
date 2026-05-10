@@ -6,7 +6,7 @@
                 <h5 class="modal-title">Add New Multi-Level Campaign</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('admin.campaign.create') }}" method="POST">
+            <form action="{{ route('admin.campaign.create') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="row border-bottom mb-4 pb-3">

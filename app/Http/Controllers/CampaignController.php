@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campaign;
+use App\Models\CampaignLevel;
 use App\Models\Game;
 use App\Models\Subscription;
 use App\Models\ChargeLog;
@@ -32,7 +33,7 @@ class CampaignController extends Controller
 
             if ($request->game_id) {
                 if ($request->game_id == 'active-next-camp') {
-                    $query->where('end_date', '>', Carbon::now()->toDateString());
+                    $query->where('end_date', '>=', Carbon::now()->toDateString());
                 } else {
                     $query->where('game_id', $request->game_id);
                 }
@@ -61,14 +62,24 @@ class CampaignController extends Controller
 
     public function fetch(Request $request, $id)
     {
-        $campaign = Campaign::orderBy('created_at', 'desc')
-            ->where('id', $id)
+        $campaign = Campaign::where('id', $id)
             ->first();
 
-        $campaign = $campaign->calculateTimeForCampaign($campaign);
+        $campaign->levels = CampaignLevel::where('campaign_id', $id)
+            ->orderBy('level_number', 'asc')
+            ->get();
 
 
-        $campaign->type = $this->isActiveCampaign($id);
+        if (!$campaign->levels->count() > 0) {
+            $campaign = $campaign->calculateTimeForCampaign($campaign);
+            $campaign->type = $this->isActiveCampaign($id);
+        } else {
+            foreach ($campaign->levels as $level) {
+                $game = Game::select()->where('status', 1)->where('id', $level->game_id)->first();
+                $level->game_title = $game->title;
+                $level->prize = Prize::where('id', $level->prize_id)->with('distributions')->first();
+            }
+        }
 
         $game = Game::select()->where('status', 1)->where('id', $campaign->game_id)->first();
 
@@ -160,6 +171,32 @@ class CampaignController extends Controller
     public function create(Request $request)
     {
         try {
+
+
+
+            if ($request->levels) {
+                // 2. Simpan Data Tournament Utama
+                $tournament = Campaign::create([
+                    'name'   => $request->name,
+                    'amount' => $request->amount,
+                    'status' => $request->status,
+                ]);
+
+                if ($request->has('levels')) {
+                    foreach ($request->levels as $index => $levelData) {
+                        $tournament->levels()->create([
+                            'level_number' => $index + 1,
+                            'game_id'    => $levelData['game_id'],
+                            'prize_id'   => $levelData['prize_id'],
+                            'start_date' => $levelData['start_date'],
+                            'end_date'   => $levelData['end_date'],
+                        ]);
+                    }
+                }
+                Session::flash('success', 'Campaign created successfully');
+                return redirect()->back();
+            }
+
 
             $startDateTime = $request->start_date_time;
             $endDateTime = $request->end_date_time;
@@ -266,22 +303,10 @@ class CampaignController extends Controller
     public function cloneCampaign($id)
     {
 
-
         try {
-            $existingCampaign = Campaign::findOrFail($id);
-            $campaign = new Campaign();
-            $campaign->prize_id = $existingCampaign->prize_id;
-            $campaign->start_date = Carbon::parse($existingCampaign->end_date)->addDay()->format('Y-m-d');
-            $campaign->start_time = $existingCampaign->start_time;
-            $campaign->end_date = Carbon::parse($existingCampaign->end_date)->addDays(3)->format('Y-m-d');
-            $campaign->end_time = $existingCampaign->end_time;
-            $campaign->name = $existingCampaign->name;
-            $campaign->gift_amount = $existingCampaign->gift_amount;
-            $campaign->amount = $existingCampaign->amount;
-            $campaign->game_id = $existingCampaign->game_id;
-            $campaign->banner = $existingCampaign->banner;
-            $campaign->score_count_type = $existingCampaign->score_count_type;
-            $campaign->game_keyword = $existingCampaign->game_keyword;
+            $campaign = Campaign::findOrFail($id)->replicate();
+            $campaign->start_date = Carbon::parse($campaign->end_date)->addDay()->format('Y-m-d');
+            $campaign->end_date   = Carbon::parse($campaign->end_date)->addDays(3)->format('Y-m-d');
             $campaign->save();
             Session::flash('success', 'Campaign created successfully');
             return redirect()->back();

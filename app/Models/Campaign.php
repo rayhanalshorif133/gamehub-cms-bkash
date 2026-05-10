@@ -54,6 +54,11 @@ class Campaign extends Model
         $this->save();
     }
 
+    public function levels()
+    {
+        return $this->hasMany(CampaignLevel::class);
+    }
+
 
     public function calculateTimeForCampaign($campaign)
     {
