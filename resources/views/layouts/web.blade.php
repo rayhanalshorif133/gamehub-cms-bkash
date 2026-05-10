@@ -289,6 +289,7 @@
 
 
             const msisdn = $("#auth_phone_number").val();
+            console.log(msisdn);
 
             const keyword = 'APP';
             const campaign_id = $(this).attr("data-campid");

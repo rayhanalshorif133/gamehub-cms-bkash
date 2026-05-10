@@ -12,6 +12,7 @@ use App\Http\Controllers\PrizeController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\ZipUploadController;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -141,3 +142,10 @@ Route::prefix('admin')->name('admin.')->middleware('role:admin')->group(function
 // landing page LandingPageController
 Route::get('landing', [LandingPageController::class, 'index'])->name('landing.index');
 Route::get('new-password/{msisdn}/{camp_id}', [LandingPageController::class, 'newPassword'])->name('landing.new-password');
+
+
+
+
+
+Route::get('/game-dev/upload-game', [ZipUploadController::class, 'index'])->name('game-dev.upload-game');
+Route::post('/game-dev/upload-game', [ZipUploadController::class, 'uploadAndUnzip'])->name('game-dev.upload');

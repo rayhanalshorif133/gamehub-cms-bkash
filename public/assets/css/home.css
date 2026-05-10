@@ -505,7 +505,7 @@ div#three_carousel {
 .game_card_footer .game_card_footer_time p {
     margin: 0;
     color: #ffffff;
-    font-size: 13px;
+    font-size: 11px;
     font-weight: 500;
     
     background: rgba(0, 0, 0, 0.42);
@@ -524,8 +524,9 @@ div#three_carousel {
 }
 
 .game_card_footer button {
-    width: 137px;
+    width: 127px;
     height: 47px;
+    margin: 0 10px;
     border-radius: 16px;
     gap: 10px;
     opacity: 1;
@@ -844,7 +845,7 @@ div#three_carousel {
     }
 
     .game_over_game_title {
-        font-size: 26px;
+        font-size: 22px;
         margin-top: 28px;
         margin-bottom: 6rem;
     }
@@ -889,7 +890,7 @@ div#three_carousel {
     }
 
     .game_over_game_title {
-        font-size: 2.2rem;
+        font-size: 20px;
         color: #fff;
         font-family: "Rajdhani", sans-serif;
         display: flex;

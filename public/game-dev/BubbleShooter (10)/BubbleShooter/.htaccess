@@ -1,0 +1,11 @@
+<IfModule mod_mime.c>
+    AddType application/wasm .wasm
+    AddType application/javascript .js
+    AddType application/octet-stream .data
+</IfModule>
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.wasm$">
+        Header set Content-Type "application/wasm"
+    </FilesMatch>
+</IfModule>

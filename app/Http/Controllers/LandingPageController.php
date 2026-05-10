@@ -6,11 +6,7 @@ use App\Models\Game;
 use App\Models\Campaign;
 use App\Models\TrafficLog;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\api\ScoreController;
-use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
 
 
 class LandingPageController extends Controller
@@ -25,17 +21,17 @@ class LandingPageController extends Controller
         $trafficLog->save();
 
 
-        $campaigns = Campaign::select()
+        $today = Carbon::today()->format('Y-m-d');
+        $campaigns = Campaign::where('status', 1)
+            ->whereDate('start_date', '<=', $today)
+            ->whereDate('end_date', '>=', $today)
+            ->inRandomOrder()
             ->get()
             ->each(function ($campaign) {
-                $campaign = $campaign->calculateTimeForCampaign($campaign);
                 $campaign->game = Game::select()->where('id', $campaign->game_id)->first();
-            })->filter(function ($campaign) {
-                return $campaign->time_status !== 'Expired';
-            })->values();
-        $activeCampaign = $campaigns->firstWhere('time_status', '!=', 'Expired');
-        $hasSubs = false;
-        return view('landing.index', compact('activeCampaign', 'hasSubs'));
+            });
+
+        return view('landing.index', compact('campaigns'));
     }
 
     public function newPassword(Request $request, $msisdn, $camp_id)

@@ -14,7 +14,7 @@
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <option value="active-next-camp">Active And Upcoming Campaigns</option>
                         </select>
-                        
+
                         <select class="form-select form-select-sm" id="filterByDate" style="min-width: 200px;">
                             <option value="0" selected disabled>Filter by Date</option>
                             <?php $__currentLoopData = $campaignDates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $date): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -245,6 +245,11 @@
                 order: [
                     [0, 'desc']
                 ],
+                pageLength: 50, 
+                lengthMenu: [
+                    [50, 100, 500], 
+                    [50, 100, 500] 
+                ],
                 columns: [{
                         render: function(data, type, row) {
                             return row.DT_RowIndex;
@@ -254,14 +259,21 @@
                     },
                     {
                         render: function(data, type, row) {
-                            return row.name;
+                            return `
+                                <div class="d-flex align-items-center">
+                                    ${row.name}
+                                    <a href="/admin/report/weekly-winner-list?camp_id=${row.id}" class="mx-1 fa-xs">
+                                        <i class="bx bx-show"></i>
+                                    </a>
+                                </div>
+                            `;
                         },
                         targets: 0,
                         className: 'fit-content' // Add a custom class
                     },
                     {
                         render: function(data, type, row) {
-                            if(row.pay_count == 0){
+                            if (row.pay_count == 0) {
                                 return `${row.amount}/= (Upcoming)`;
                             }
                             return `${row.amount}/= (${row.pay_count})`;
@@ -333,7 +345,7 @@
 
 
 
-          
+
 
         };
 

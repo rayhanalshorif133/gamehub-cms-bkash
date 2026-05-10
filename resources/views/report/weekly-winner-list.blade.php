@@ -121,6 +121,17 @@
         $(document).ready(function() {
             handleWeeklyDataTable();
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const campIdFromParams = urlParams.get('camp_id');
+            if (campIdFromParams) {
+                $('#campaign_by_keyword option').each(function() {
+                    if ($(this).data('camp_id') == campIdFromParams) {
+                        $(this).prop('selected', true);
+                        return false;
+                    }
+                });
+            }
+
             $('#campaign_by_keyword').select2({
                 theme: "bootstrap-5", // Use the Bootstrap 5 theme
                 width: '100%',
@@ -187,7 +198,8 @@
                         data: 'msisdn',
                         name: 'msisdn',
                         render: function(data, type, row) {
-                            const redirectUrl = `/admin/report/score-log?camp_id=${campId}&msisdn=${data}&start_date=${$('#date_from').val()}&end_date=${$('#date_to').val()}`;
+                            const redirectUrl =
+                                `/admin/report/score-log?camp_id=${campId}&msisdn=${data}&start_date=${$('#date_from').val()}&end_date=${$('#date_to').val()}`;
                             return row.DT_RowIndex <= 3 ?
                                 `<a href="${redirectUrl}"><strong>${data.replace(/^88/, '')}</strong></a>` :
                                 `<a href="${redirectUrl}">${data.replace(/^88/, '')}</a>`;
