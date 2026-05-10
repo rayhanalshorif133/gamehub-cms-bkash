@@ -1,6 +1,4 @@
-@extends('layouts.app')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
     <div class="px-3 container-p-y">
         <div class="row p-1rem">
             <div class="card shadow-sm">
@@ -9,19 +7,19 @@
                     <div class="d-flex gap-2 align-items-center">
                         <select class="form-select form-select-sm" id="filterByGame" style="min-width: 200px;">
                             <option value="0" selected disabled>Filter by Game</option>
-                            @foreach ($games as $game)
-                                <option value="{{ $game->id }}" data-title="{{ $game->title }}">
-                                    {{ $game->title }} ({{ $game->keyword }})
+                            <?php $__currentLoopData = $games; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $game): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($game->id); ?>" data-title="<?php echo e($game->title); ?>">
+                                    <?php echo e($game->title); ?> (<?php echo e($game->keyword); ?>)
                                 </option>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <option value="active-next-camp">Active And Upcoming Campaigns</option>
                         </select>
 
                         <select class="form-select form-select-sm" id="filterByDate" style="min-width: 200px;">
                             <option value="0" selected disabled>Filter by Date</option>
-                            @foreach ($campaignDates as $date)
-                                <option value="{{ $date }}">{{ $date }}</option>
-                            @endforeach
+                            <?php $__currentLoopData = $campaignDates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $date): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($date); ?>"><?php echo e($date); ?></option>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </select>
 
                         <button class="btn btn-primary btn-sm px-3 addCampaignBtn" data-bs-toggle="modal"
@@ -56,19 +54,19 @@
 
 
 
-        @include('campaign.create')
-        @include('campaign.update')
+        <?php echo $__env->make('campaign.create', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
+        <?php echo $__env->make('campaign.update', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 
     </div>
 
     <form id="deleteCampaignForm" class="d-none" action="#" method="POST">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
         <input type="hidden" name="_method" value="DELETE">
         <button type="submit" class="d-none" id="deleteCampaignBtnSubmit"></button>
     </form>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script>
         $(document).ready(function() {
             url = '/admin/campaign';
@@ -330,4 +328,6 @@
                 .catch(error => console.error('Error updating campaign:', error));
         };
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH D:\Rayhan\Development\gamehub-cms-bkash\resources\views/campaign/index.blade.php ENDPATH**/ ?>
