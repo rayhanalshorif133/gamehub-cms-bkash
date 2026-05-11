@@ -80,6 +80,8 @@ class HomeController extends Controller
 
 
                 $today = Carbon::today()->toDateString();
+
+
                 $campaignLevel = CampaignLevel::where('campaign_id', $campaign->id)
                     ->where('start_date', '<=', $today)
                     ->where('end_date', '>=', $today)
