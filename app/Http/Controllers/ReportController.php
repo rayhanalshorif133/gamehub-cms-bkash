@@ -33,16 +33,15 @@ class ReportController extends Controller
                 $query->where('msisdn', 'LIKE', '%' . $request->msisdn . '%');
             }
 
-            if ($request->from_date) {
-                $query->whereDate('charge_date', '>=', $request->from_date);
+            $fromDate = $request->input('from_date');
+            $toDate = $request->input('to_date', $fromDate);
+
+            if ($fromDate) {
+                $query->whereDate('charge_date', '>=', $fromDate);
             }
 
-            if (!$request->to_date) {
-                $request->to_date = $request->from_date;
-            }
-
-            if ($request->to_date) {
-                $query->whereDate('charge_date', '<=', $request->to_date);
+            if ($toDate) {
+                $query->whereDate('charge_date', '<=', $toDate);
             }
 
             $query->orderBy('charge_date', 'desc');
@@ -120,6 +119,7 @@ class ReportController extends Controller
                 ->toJson();
         }
 
+        $games = Game::all();
         $campaigns = Campaign::select()
             ->get()
             ->each(function ($campaign) {
@@ -128,7 +128,7 @@ class ReportController extends Controller
 
 
         $activeCampaign = $campaigns->firstWhere('time_status', '!=', 'Expired');
-        return view('report.weekly-winner-list', compact('campaigns', 'activeCampaign'));
+        return view('report.weekly-winner-list', compact('games','campaigns', 'activeCampaign'));
     }
 
     // score log

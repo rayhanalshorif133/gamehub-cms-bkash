@@ -1,5 +1,3 @@
-
-
 <?php $__env->startSection('content'); ?>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet"
@@ -15,7 +13,16 @@
                         </div>
 
                         <div class="row g-3">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <label class="form-label small fw-bold text-uppercase">Select Game</label>
+                                <select id="game_filter" class="form-select form-select-sm">
+                                    <option value="" selected disabled>Please Select a Game</option>
+                                    <?php $__currentLoopData = $games; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $game): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($game->keyword); ?>"><?php echo e($game->title); ?></option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
                                 <label class="form-label small fw-bold text-uppercase">Select Campaign</label>
                                 <select id="campaign_by_keyword" class="form-select form-select-sm">
                                     <?php $__currentLoopData = $campaigns; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $campaign): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -33,13 +40,13 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label class="form-label small fw-bold text-uppercase">Date From</label>
                                 <input type="date" class="form-control form-control-sm" id="date_from"
                                     value="<?php echo e(date('Y-m-d', strtotime('-7 days'))); ?>">
                             </div>
 
-                            <div class="col-md-3">
+                            <div class="col-md-2">
                                 <label class="form-label small fw-bold text-uppercase">Date To</label>
                                 <input type="date" class="form-control form-control-sm" id="date_to"
                                     value="<?php echo e(date('Y-m-d')); ?>">
@@ -51,6 +58,9 @@
                                 </button>
                             </div>
                         </div>
+                    </div>
+                    <div class="card-header bg-white border-bottom-0 py-1 d-none" id="selectedLevelTab">
+
                     </div>
 
                     <div class="card-body p-0">
@@ -132,6 +142,30 @@
                     }
                 });
             }
+            const allCampaignOptions = $('#campaign_by_keyword option').clone();
+
+            $('#game_filter').on('change', function() {
+                const selectedGame = $(this).val();
+                const campaignSelect = $('#campaign_by_keyword');
+
+                campaignSelect.empty();
+
+
+                // Default option
+                campaignSelect.append('<option value="">Select Campaign</option>');
+
+                if (selectedGame) {
+                    const filteredOptions = allCampaignOptions.filter(function() {
+                        return $(this).val() === selectedGame;
+                    });
+
+                    campaignSelect.append(filteredOptions);
+                    handleNavSelection(campaignSelect);
+                } else {
+                    campaignSelect.append(allCampaignOptions);
+                }
+
+            });
 
             $('#campaign_by_keyword').select2({
                 theme: "bootstrap-5", // Use the Bootstrap 5 theme
@@ -156,6 +190,75 @@
             $('#campaign_by_keyword').trigger('change');
 
         });
+
+        const handleNavSelection = (campaignSelect) => {
+            const today = new Date().toISOString().split('T')[0];
+            $("#selectedLevelTab").removeClass('d-none');
+            $("#selectedLevelTab").html('');
+            table.clear().draw();
+
+            let currentOption = null;
+
+            campaignSelect.find('option').each(function() {
+                const start = $(this).data('start');
+                const end = $(this).data('end');
+
+                if (start && end && today >= start && today <= end) {
+                    $(this).prop('selected', true);
+                    currentOption = $(this);
+                    campaignSelect.trigger('change');
+                    return false;
+                }
+            });
+
+            const activeOpt = currentOption || campaignSelect.find('option:selected');
+            const prev1 = activeOpt.prev('option');
+            const prev2 = prev1.prev('option');
+
+            // 3. Extract names/labels for the buttons (Optional, but makes the UI better)
+            const labelCurrent = activeOpt.text().split('.')[1]?.trim() || "Current";
+            const labelPrev1 = prev1.length ? (prev1.text().split('.')[1]?.trim() || "Prev 1") : "N/A";
+            const labelPrev2 = prev2.length ? (prev2.text().split('.')[1]?.trim() || "Prev 2") : "N/A";
+
+            const HTML = `
+        <ul class="nav nav-pills nav-fill bg-light p-1 rounded" id="levelTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded ${prev2.length ? '' : 'disabled'}" id="level3-tab"
+                    data-camp-id="${prev2.data('camp_id')}" data-bs-toggle="pill" type="button" role="tab">
+                    ${labelPrev2}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link rounded ${prev1.length ? '' : 'disabled'}" id="level2-tab"
+                    data-camp-id="${prev1.data('camp_id')}" data-bs-toggle="pill" type="button" role="tab">
+                    ${labelPrev1}
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active rounded" id="level1-tab"
+                    data-camp-id="${activeOpt.data('camp_id')}" data-bs-toggle="pill" type="button" role="tab">
+                    ${labelCurrent}
+                </button>
+            </li>
+
+
+        </ul>
+    `;
+
+            if(labelPrev1 == 'N/A'){
+                HTML = '';
+            }
+
+            $("#selectedLevelTab").html(HTML);
+
+            $('#levelTab button').on('click', function() {
+                const campId = $(this).data('camp-id');
+                if (campId) {
+                    campaignSelect.find(`option[data-camp_id="${campId}"]`).prop('selected', true);
+                    campaignSelect.trigger('change');
+                }
+            });
+        };
 
         const handleWeeklyDataTable = () => {
 
@@ -219,7 +322,7 @@
                                 `/admin/report/day-based-score-log?camp_id=${campId}&msisdn=${row.msisdn}`;
 
                             return `
-                                <strong>${data}</strong> 
+                                <strong>${data}</strong>
                                 <a href="${url}" class="ms-2" title="Show Details">
                                     <i class='bx bx-show text-info' style="font-size: 1.2rem; cursor: pointer;"></i>
                                     </a>`;

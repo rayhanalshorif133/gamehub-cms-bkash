@@ -64,13 +64,13 @@
         </li>
 
         <!-- Daily Winner List -->
-        <li class="menu-item @if ($currentRoute == 'admin.report.daily-winner-list') active open @endif">
+        {{-- <li class="menu-item @if ($currentRoute == 'admin.report.daily-winner-list') active open @endif">
             <a href="{{ route('admin.report.daily-winner-list') }}" class="menu-link">
                 <i
                     class="menu-icon tf-icons bx bx-trophy @if ($currentRoute == 'admin.report.daily-winner-list') selectedIconPopup @endif"></i>
                 <div class="text-semibold">Daily Winner List</div>
             </a>
-        </li>
+        </li> --}}
 
         <!-- Weekly Winner List -->
         <li class="menu-item @if ($currentRoute == 'admin.report.weekly-winner-list') active open @endif">

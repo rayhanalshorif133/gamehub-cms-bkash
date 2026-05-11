@@ -12,7 +12,7 @@ use App\Models\Subscription;
 use App\Models\PointLog;
 use App\Models\Game;
 use Carbon\Carbon;
-use App\Models\Boost;
+use App\Models\CampaignLevel;
 use App\Models\UserHasBoost;
 use App\Models\UserBlockList;
 
@@ -49,10 +49,17 @@ class HomeController extends Controller
 
         $today = Carbon::today()->format('Y-m-d');
 
+        $targetKeyword = 'bubble-shooter';
+
         $campaigns = Campaign::where('status', 1)
             ->whereDate('start_date', '<=', $today)
             ->whereDate('end_date', '>=', $today)
-            ->inRandomOrder()
+            ->orderByRaw("
+        CASE
+            WHEN game_keyword LIKE ? THEN 1
+            ELSE 2
+        END ASC", ["%{$targetKeyword}%"])
+            ->orderBy('game_keyword', 'asc') // Secondary sort to keep things organized
             ->get();
 
 
@@ -70,12 +77,26 @@ class HomeController extends Controller
                 $campaign->msisdn = $user->phone;
                 $campaign->count_player = ChargeLog::where('campaign_id', $campaign->id)
                     ->count();
-                $campaign->bg_color = Game::select('bg_color')
-                    ->where('id', $campaign->game_id)
-                    ->first()
-                    ->bg_color;
 
-               $campaign->block = UserBlockList::where('msisdn', $user->phone)
+
+                $today = Carbon::today()->toDateString();
+                $campaignLevel = CampaignLevel::where('campaign_id', $campaign->id)
+                    ->where('start_date', '<=', $today)
+                    ->where('end_date', '>=', $today)
+                    ->orderBy('level_number', 'asc')
+                    ->first();
+
+                if ($campaignLevel && $campaignLevel->game_id) {
+                    $getGame = Game::where('id', $campaignLevel->game_id)->first();
+
+                    if ($getGame) {
+                        $campaign->bg_color = $getGame->bg_color;
+                        $campaign->banner = $getGame->icon;
+                    }
+                }
+
+
+                $campaign->block = UserBlockList::where('msisdn', $user->phone)
                     ->where('campaign_id', $campaign->id)
                     ->where('is_read', 0)
                     ->first();

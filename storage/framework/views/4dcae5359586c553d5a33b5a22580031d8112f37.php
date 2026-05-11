@@ -64,13 +64,7 @@
         </li>
 
         <!-- Daily Winner List -->
-        <li class="menu-item <?php if($currentRoute == 'admin.report.daily-winner-list'): ?> active open <?php endif; ?>">
-            <a href="<?php echo e(route('admin.report.daily-winner-list')); ?>" class="menu-link">
-                <i
-                    class="menu-icon tf-icons bx bx-trophy <?php if($currentRoute == 'admin.report.daily-winner-list'): ?> selectedIconPopup <?php endif; ?>"></i>
-                <div class="text-semibold">Daily Winner List</div>
-            </a>
-        </li>
+        
 
         <!-- Weekly Winner List -->
         <li class="menu-item <?php if($currentRoute == 'admin.report.weekly-winner-list'): ?> active open <?php endif; ?>">
