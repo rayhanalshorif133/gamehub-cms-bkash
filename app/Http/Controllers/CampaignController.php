@@ -173,29 +173,38 @@ class CampaignController extends Controller
         try {
 
 
+            // Indirect modification of overloaded property Illuminate\Http\Request::$levels has no effect
+            if ($request->has('levels') && !empty($request->levels)) {
+                // 1. Assign to a variable to avoid the "overloaded property" error
+                $levels = $request->levels;
 
-            if ($request->levels) {
-                // 2. Simpan Data Tournament Utama
-                $tournament = Campaign::create([
+                $campaign = Campaign::create([
                     'name'   => $request->name,
                     'amount' => $request->amount,
                     'status' => $request->status,
                 ]);
 
-                if ($request->has('levels')) {
-                    foreach ($request->levels as $index => $levelData) {
-                        $tournament->levels()->create([
-                            'level_number' => $index + 1,
-                            'game_id'    => $levelData['game_id'],
-                            'prize_id'   => $levelData['prize_id'],
-                            'start_date' => $levelData['start_date'],
-                            'end_date'   => $levelData['end_date'],
-                        ]);
-                    }
+                foreach ($levels as $index => $levelData) {
+                    $campaign->levels()->create([
+                        'level_number' => $index + 1,
+                        'game_id'    => $levelData['game_id'],
+                        'prize_id'   => $levelData['prize_id'],
+                        'start_date' => $levelData['start_date'],
+                        'end_date'   => $levelData['end_date'],
+                    ]);
                 }
+
+                // 2. Use the variable here
+                $campaign->start_date = $levels[0]['start_date'];
+                $campaign->end_date = end($levels)['end_date'];
+                $campaign->save();
+
                 Session::flash('success', 'Campaign created successfully');
                 return redirect()->back();
             }
+
+
+
 
 
             $startDateTime = $request->start_date_time;

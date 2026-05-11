@@ -1,0 +1,1 @@
+<?php /**PATH D:\Rayhan\Development\gamehub-cms-bkash\resources\views/_partials/web_footer.blade.php ENDPATH**/ ?>
