@@ -198,12 +198,87 @@
                     }
                 }
             });
-
-
-
-
-
         };
+
+        const updateCampains = new bootstrap.Modal(document.getElementById('updateCampainsModal'));
+        const updateCampaign = (id) => {
+            // কন্টেইনার ক্লিয়ার করা
+            const container = $('#update-levels-container');
+            container.html(`<h6 class="fw-bold mb-3">Campaign Levels</h6>`);
+
+            axios.get(`/campaign/${id}/fetch`)
+                .then((response) => {
+                    console.log(response);
+                    const data = response.data.data;
+
+                    // ১. বেসিক ডাটা ফিল্ডে বসানো
+                    $('#update_campaignID').val(data.id);
+                    $('#update_campaignName').val(data.name);
+                    $('#update_campaignAmount').val(data.amount);
+                    $('#updateCampaignStatus').val(data.status);
+
+                    // ২. লেভেল গুলো লুপ চালিয়ে রেন্ডার করা
+                    if (data.levels && data.levels.length > 0) {
+                        data.levels.forEach((level, index) => {
+                            const levelHtml = `
+                    <div class="level-card border rounded p-3 mb-3 bg-light position-relative">
+                        <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-update-level"></button>
+                        <h6 class="text-primary font-weight-bold">Level ${index + 1}</h6>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label required">Select a Game</label>
+                                <select class="form-select" name="levels[${index}][game_id]" required>
+                                    <option value="" disabled>Select a Game</option>
+                                    <?php $__currentLoopData = $games; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $game): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($game->id); ?>" ${level.game_id == <?php echo e($game->id); ?> ? 'selected' : ''}>
+                                            <?php echo e($game->title); ?>
+
+                                        </option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label required">Select a Prize</label>
+                                <select class="form-select" name="levels[${index}][prize_id]" required>
+                                    <option value="" disabled>Select a Prize</option>
+                                    <?php $__currentLoopData = $prizes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $prize): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($prize->id); ?>" ${level.prize_id == <?php echo e($prize->id); ?> ? 'selected' : ''}>
+                                            <?php echo e($prize->title); ?>
+
+                                        </option>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label required">Start Date</label>
+                                <input type="date" class="form-control" name="levels[${index}][start_date]" value="${level.start_date}" required>
+                            </div>
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label required">End Date</label>
+                                <input type="date" class="form-control" name="levels[${index}][end_date]" value="${level.end_date}" required>
+                            </div>
+                        </div>
+                    </div>`;
+                            container.append(levelHtml);
+                        });
+
+                        // গ্লোবাল লেভেল কাউন্টার আপডেট করা (নতুন লেভেল যোগ করার সুবিধার্থে)
+                        updateLevelCount = data.levels.length;
+                    }
+
+                    // মোডাল দেখানো
+                    updateCampains.show();
+                })
+                .catch(error => {
+                    console.error("Error fetching campaign data!", error);
+                    alert("Failed to fetch data.");
+                });
+        };
+
+        let updateLevelCount = 0;
+        $(document).on('click', '#update-add-level-btn', function() {
+            renderLevelRow();
+        });
 
 
         const deleteCampaign = (id) => {
@@ -225,35 +300,7 @@
             });
         };
 
-        const updateCampains = new bootstrap.Modal(document.getElementById('updateCampainsModal'));
-        const updateCampaign = (id) => {
 
-            const form = document.getElementById('updateCampaignForm');
-            axios.get(`/campaign/${id}/fetch`)
-                .then((response) => {
-                    const data = response.data.data;
-                    $('#update_campaignID').val(data.id);
-                    $('#update_campaignName').val(data.name);
-                    $('#update_campaignAmount').val(data.amount);
-                    $('#update_campaignDescription').val(data.description);
-
-                    // Auto Selected Start Date & Time
-                    data.start_date = data.start_date.split('T')[0];
-                    const start_date_time = data.start_date + "T" + data.start_time.substring(0, 5);
-                    $("#update_startDateTime").val(start_date_time);
-
-                    // Auto Selected End Date & Time
-                    data.end_date = data.end_date.split('T')[0];
-                    const end_date_time = data.end_date + "T" + data.end_time.substring(0, 5);
-                    $("#update_endDateTime").val(end_date_time);
-                    $("#updateCampaignGame").val(data.game_id);
-                    $("#updateCampaignStatus").val(data.status);
-
-
-                });
-
-            updateCampains.show();
-        };
 
         const showCampaignModal = new bootstrap.Modal(document.getElementById('showCampaignModal'));
         const showCampaign = (id) => {

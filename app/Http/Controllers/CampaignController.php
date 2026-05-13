@@ -65,6 +65,10 @@ class CampaignController extends Controller
         $campaign = Campaign::where('id', $id)
             ->first();
 
+        if (!$campaign) {
+            return $this->respondWithError('Campaign Not Found');
+        }
+
         $campaign->levels = CampaignLevel::where('campaign_id', $id)
             ->orderBy('level_number', 'asc')
             ->get();
@@ -172,10 +176,7 @@ class CampaignController extends Controller
     {
         try {
 
-
-            // Indirect modification of overloaded property Illuminate\Http\Request::$levels has no effect
             if ($request->has('levels') && !empty($request->levels)) {
-                // 1. Assign to a variable to avoid the "overloaded property" error
                 $levels = $request->levels;
 
                 $campaign = Campaign::create([
@@ -186,7 +187,11 @@ class CampaignController extends Controller
                     'end_time'   => Carbon::parse($request->end_time)->setTime(23, 59, 0),
                 ]);
 
+                $total_amount = 0;
+
                 foreach ($levels as $index => $levelData) {
+                    $findPrize = Prize::find($levelData['prize_id']);
+                    $total_amount += (int)$findPrize->total_amount;
                     $campaign->levels()->create([
                         'level_number' => $index + 1,
                         'game_id'    => $levelData['game_id'],
@@ -196,7 +201,8 @@ class CampaignController extends Controller
                     ]);
                 }
 
-                // 2. Use the variable here
+                $campaign->gift_amount  = $total_amount;
+
                 $campaign->start_date = $levels[0]['start_date'];
                 $campaign->end_date = end($levels)['end_date'];
                 $campaign->save();
@@ -204,36 +210,8 @@ class CampaignController extends Controller
                 Session::flash('success', 'Campaign created successfully');
                 return redirect()->back();
             }
-
-
-
-
-
-            $startDateTime = $request->start_date_time;
-            $endDateTime = $request->end_date_time;
-            $campaign = new Campaign();
-            $findPrize = Prize::find($request->prize_id);
-            $campaign->prize_id = $request->prize_id;
-            $campaign->start_date = date('Y-m-d', strtotime($startDateTime));
-            $campaign->start_time = date('H:i:s', strtotime($startDateTime));
-            $campaign->end_date = date('Y-m-d', strtotime($endDateTime));
-            $campaign->end_time = date('H:i:s', strtotime($endDateTime));
-            $campaign->name = $request->name;
-            $campaign->amount = $request->amount;
-            $campaign->gift_amount = $findPrize->total_amount;
-            $campaign->game_id = $request->game_id;
-            $findGame = Game::find($request->game_id);
-            if ($findGame) {
-                $campaign->banner = $findGame->icon;
-                $campaign->game_keyword = $findGame->keyword;
-            }
-            $campaign->save();
-
-            Session::flash('success', 'Campaign created successfully');
-            return redirect()->back();
         } catch (\Throwable $th) {
             Session::flash('error', 'Something went wrong');
-            Session::flash('error', $th->getMessage());
             return redirect()->back();
         }
     }
@@ -242,49 +220,70 @@ class CampaignController extends Controller
     public function update(Request $request)
     {
         try {
-
-
             $campaign_id = $request->campaign_id;
-
-            if (!$campaign_id) {
-                Session::flash('error', 'Campaign Not Found, Please try Again!');
-                return redirect()->back();
-            }
-
-
-            $startDateTime = $request->start_date_time;
-            $endDateTime = $request->end_date_time;
             $campaign = Campaign::find($campaign_id);
+
             if (!$campaign) {
                 Session::flash('error', 'Campaign Not Found, Please try Again!');
                 return redirect()->back();
             }
-            $campaign->start_date = date('Y-m-d', strtotime($startDateTime));
-            $campaign->start_time = date('H:i:s', strtotime($startDateTime));
-            $campaign->end_date = date('Y-m-d', strtotime($endDateTime));
-            $campaign->end_time = date('H:i:s', strtotime($endDateTime));
+
+            // ১. ক্যাম্পেইনের বেসিক ডাটা আপডেট
             $campaign->name = $request->name;
             $campaign->status = $request->status;
             $campaign->amount = $request->amount;
-            if ($request->banner) {
+
+            // ২. ব্যানার আপডেট (আগের ফাইল ডিলিট করার লজিক সহ)
+            if ($request->hasFile('banner')) {
                 $image = $request->file('banner');
                 $image_name = time() . '_' . $image->getClientOriginalName();
-
                 $image->move(public_path('/images/campaign'), $image_name);
+
+                // ডাটাবেজে পাথ সেভ করা
                 $campaign->banner = '/images/campaign/' . $image_name;
             }
 
-            $findGame = Game::find($request->game_id);
-            $campaign->game_id = $request->game_id;
-            if ($findGame) {
-                $campaign->game_keyword = $findGame->keyword;
+            // ৩. লেভেল প্রসেসিং (যদি লেভেল ডাটা থাকে)
+            if ($request->has('levels') && !empty($request->levels)) {
+                $levels = $request->levels;
+
+                $campaign->levels()->delete();
+
+                $total_gift_amount = 0;
+
+                foreach ($levels as $index => $levelData) {
+                    $findPrize = Prize::find($levelData['prize_id']);
+                    if ($findPrize) {
+                        $total_gift_amount += (float)$findPrize->total_amount;
+                    }
+
+                    // লেভেল তৈরি
+                    $campaign->levels()->create([
+                        'level_number' => $index + 1,
+                        'game_id'      => $levelData['game_id'],
+                        'prize_id'     => $levelData['prize_id'],
+                        'start_date'   => $levelData['start_date'],
+                        'end_date'     => $levelData['end_date'],
+                    ]);
+                }
+
+                // ৪. ক্যাম্পেইনের অটোমেটিক মেটা ডাটা সেট করা
+                $campaign->gift_amount = $total_gift_amount;
+
+                // প্রথম লেভেলের স্টার্ট ডেট এবং শেষ লেভেলের এন্ড ডেট ক্যাম্পেইনে সেট করা
+                $campaign->start_date = $levels[0]['start_date'];
+                $campaign->end_date = end($levels)['end_date'];
+
+                $campaign->start_time = "00:01:00";
+                $campaign->end_time = "23:59:00";
             }
+
             $campaign->save();
 
             Session::flash('success', 'Campaign updated successfully');
             return redirect()->back();
         } catch (\Throwable $th) {
-            Session::flash('error', 'Something went wrong' . $th->getMessage());
+            Session::flash('error', 'Something went wrong: ' . $th->getMessage());
             return redirect()->back();
         }
     }
