@@ -11,7 +11,7 @@ class GamePlayLog extends Model
 
     protected $table = 'game_play_logs';
 
-   
+
     protected $fillable = [
         'date',
         'msisdn',
@@ -19,8 +19,10 @@ class GamePlayLog extends Model
         'score',
         'start_time',
         'end_time',
+        'durations',
         'status',
     ];
+
 
     /**
      * The attributes that should be cast.

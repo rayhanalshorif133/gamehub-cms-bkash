@@ -10,10 +10,10 @@ class PointLog extends Model
     use HasFactory;
 
 
-    protected $table = 'point_logs'; 
+    protected $table = 'point_logs';
 
 
-    
+
     protected $fillable = [
         'user_id',
         'campaign_id',
@@ -25,4 +25,6 @@ class PointLog extends Model
         'date',
         'time',
     ];
+
+
 }

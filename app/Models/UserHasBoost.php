@@ -22,6 +22,9 @@ class UserHasBoost extends Model
         'date'
     ];
 
+
+
+
     protected $casts = [
         'date' => 'date',
         'start_time' => 'datetime:H:i',

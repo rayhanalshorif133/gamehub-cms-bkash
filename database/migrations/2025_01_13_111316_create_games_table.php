@@ -15,12 +15,15 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->string('banner');
-            $table->string('description')->nullable();
-            $table->string('keyword')->unique();
-            $table->integer('attempt')->default(0)->nullable();
-            $table->string('url')->nullable();
+            $table->string('title', 255);
+            $table->string('banner', 255);
+            $table->string('icon', 255)->nullable();
+            $table->string('card_bg_image', 255)->nullable();
+            $table->string('bg_color', 255)->nullable();
+            $table->string('description', 255)->nullable();
+            $table->string('keyword', 255)->unique();
+            $table->integer('attempt')->default(0);
+            $table->string('url', 255)->nullable();
             $table->bigInteger('status')->default(1);
             $table->timestamps();
         });

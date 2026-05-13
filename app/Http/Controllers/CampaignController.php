@@ -179,9 +179,11 @@ class CampaignController extends Controller
                 $levels = $request->levels;
 
                 $campaign = Campaign::create([
-                    'name'   => $request->name,
-                    'amount' => $request->amount,
-                    'status' => $request->status,
+                    'name'       => $request->name,
+                    'amount'     => $request->amount,
+                    'status'     => $request->status,
+                    'start_time' => Carbon::parse($request->start_time)->setTime(0, 1, 0),
+                    'end_time'   => Carbon::parse($request->end_time)->setTime(23, 59, 0),
                 ]);
 
                 foreach ($levels as $index => $levelData) {
@@ -298,7 +300,7 @@ class CampaignController extends Controller
                 return redirect()->back();
             }
 
-
+            $campaign->levels()->delete();
             $campaign->delete();
             Session::flash('success', 'Campaign deleted successful...!');
             return redirect()->back();

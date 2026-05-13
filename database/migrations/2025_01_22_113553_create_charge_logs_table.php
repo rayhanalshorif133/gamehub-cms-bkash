@@ -16,13 +16,14 @@ return new class extends Migration
     {
         Schema::create('charge_logs', function (Blueprint $table) {
             $table->id();
-            $table->string('payment_id')->nullable();
+            $table->string('payment_id', 255)->nullable();
             $table->unsignedBigInteger('campaign_id')->nullable();
-            $table->string('msisdn')->nullable();
-            $table->string('keyword')->nullable();
-            $table->string('amount')->nullable();
-            $table->string('type')->nullable();
-            $table->date('charge_date')->default(today());
+            $table->string('msisdn', 255)->nullable();
+            $table->string('keyword', 255)->nullable();
+            $table->string('amount', 255)->nullable();
+            $table->string('type', 255)->nullable();
+            $table->date('charge_date')->default(DB::raw('(CURRENT_DATE)'));
+            $table->date('expire_date')->default(DB::raw('(CURRENT_DATE)'));
             $table->timestamps();
         });
     }

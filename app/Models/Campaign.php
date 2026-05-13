@@ -15,23 +15,23 @@ class Campaign extends Model
 
     protected $fillable = [
         'name',
-        'amount',
-        'start_date',
         'banner',
-        'start_time',
-        'gift_amount',
+        'game_id',
+        'prize_id',
         'game_keyword',
-        'score_count_type',
+        'amount',
+        'gift_amount',
+        'participation',
         'subs_validity',
         'prize_description',
-        'game_id',
+        'score_count_type',
+        'start_date',
+        'start_time',
         'end_date',
         'end_time',
         'status',
-        'participation',
         'description',
-        'created_by',
-        'updated_by'
+        'time_status',
     ];
 
     protected $dates = [

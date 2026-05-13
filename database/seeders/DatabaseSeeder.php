@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         $gameSeeder = new GameSeeder();
         $gameSeeder->run();
 
-        $campaign = new CampaignSeeder();
-        $campaign->run();
+        // $campaign = new CampaignSeeder();
+        // $campaign->run();
     }
 }

@@ -15,20 +15,25 @@ return new class extends Migration
     {
         Schema::create('scores', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('campaign_id')->nullable()->constrained();
-            $table->unsignedBigInteger('subscription_id')->nullable()->constrained();
-            $table->string('msisdn');
-            $table->string('score');
-            $table->string('game_keyword');
-            $table->string('status')->default('1');
-            $table->string('encrypted_score')->nullable();
+            $table->unsignedBigInteger('campaign_id')->nullable();
+            $table->unsignedBigInteger('subscription_id')->nullable();
+            $table->string('msisdn', 255);
+            $table->integer('score')->default(0);
+            $table->time('durations')->nullable();
+            $table->string('game_keyword', 255);
+            $table->bigInteger('status')->default(0);
+            $table->string('encrypted_score', 255)->nullable();
             $table->dateTime('date_time')->nullable();
-            $table->string('device_type')->nullable();
-            $table->string('user_mac')->nullable();
-            $table->string('mac')->nullable();
-            $table->string('message')->nullable();
+            $table->string('device_type', 255)->nullable();
+            $table->string('user_mac', 255)->nullable();
+            $table->string('mac', 255)->nullable();
+            $table->string('message', 255)->nullable();
             $table->text('hit_url')->nullable();
             $table->timestamps();
+
+            // Indexes for performance (Recommended for scoreboards)
+            $table->index('msisdn');
+            $table->index('campaign_id');
         });
     }
 

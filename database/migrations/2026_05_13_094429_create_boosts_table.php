@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bkashes', function (Blueprint $table) {
+        Schema::create('boosts', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->nullable();
-            $table->string('password')->nullable();
-            $table->string('mobile_number')->nullable();
-            $table->string('status')->nullable()->default('pending');
-            $table->text('id_token')->nullable();
-            $table->json('response')->nullable();
+            $table->string('name', 255);
+            $table->string('desc', 255)->nullable();
+            $table->string('type', 100);
+            $table->bigInteger('score_up')->default(1);
+            $table->decimal('amount', 10, 2);
+            $table->integer('validity')->comment('second');
+            $table->string('status', 50)->default('active');
             $table->timestamps();
         });
     }
@@ -32,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bkashes');
+        Schema::dropIfExists('boosts');
     }
 };

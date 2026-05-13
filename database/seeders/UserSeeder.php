@@ -24,20 +24,13 @@ class UserSeeder extends Seeder
 
         $admin = User::create([
             'name' => 'admin',
-            'phone' => '8801323174104',
-            'email' => 'admin@b2m-tech.com',
-            'password' => Hash::make('admin@b2m-tech.com'),
+            'phone' => '8801923988380',
+            'email' => 'admin@gmail.com',
+            'password' => Hash::make('admin@b2m')
         ]);
 
-        $player = User::create([
-            'name' => 'User 1',
-            'email' => 'user@b2m-tech.com',
-            'phone' => '8801323174102',
-            'password' => Hash::make('user@b2m-tech.com'),
-        ]);
 
         $admin->assignRole($adminRole); // Assign 'admin' role to the admin user
-        $player->assignRole($playerRole);
 
 
     }

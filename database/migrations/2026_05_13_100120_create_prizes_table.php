@@ -13,12 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bkash_logs', function (Blueprint $table) {
+        Schema::create('prizes', function (Blueprint $table) {
             $table->id();
-            $table->string('mobile_number')->nullable();
-            $table->text('id_token')->nullable();
-            $table->date('created_date')->nullable(); // For date only
-            $table->time('created_time')->nullable(); // For time only
+            $table->string('title', 255);
+            $table->decimal('total_amount', 15, 2)->default(0.00);
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bkash_logs');
+        Schema::dropIfExists('prizes');
     }
 };

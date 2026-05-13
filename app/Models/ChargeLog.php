@@ -20,6 +20,11 @@ class ChargeLog extends Model
         'charge_date',
     ];
 
-  
+
+    protected $casts = [
+        'campaign_id' => 'integer',
+        'charge_date' => 'date',
+        'expire_date' => 'date',
+    ];
 
 }

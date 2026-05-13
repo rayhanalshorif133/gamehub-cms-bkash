@@ -15,12 +15,15 @@ use Carbon\Carbon;
 use App\Models\CampaignLevel;
 use App\Models\UserHasBoost;
 use App\Models\UserBlockList;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
 
     public function home(Request $request)
     {
+
+
 
         $hasLoginAchievement = false;
 

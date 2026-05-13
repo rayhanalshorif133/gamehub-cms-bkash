@@ -25,6 +25,7 @@ class Game extends Model
         'status'
     ];
 
+
     // Optionally, you can define the dates for the created_at and updated_at columns
     protected $dates = [
         'created_at',

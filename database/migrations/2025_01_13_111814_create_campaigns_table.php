@@ -15,20 +15,24 @@ return new class extends Migration
     {
         Schema::create('campaigns', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('banner')->nullable();
+            $table->string('name', 255);
+            $table->string('banner', 255)->nullable();
             $table->unsignedBigInteger('game_id')->nullable();
-            $table->string('game_keyword')->nullable();
+            $table->unsignedBigInteger('prize_id')->nullable();
+            $table->string('game_keyword', 255)->nullable();
             $table->double('amount', 8, 2)->nullable();
-            $table->integer('participation')->default(0)->nullable();
+            $table->integer('gift_amount')->default(0);
+            $table->integer('participation')->default(0);
+            $table->string('subs_validity', 255)->default('NULL');
+            $table->string('prize_description', 255)->default('NULL');
+            $table->string('score_count_type', 100)->default('MAX');
             $table->date('start_date')->nullable();
-            $table->time('start_time', 6)->nullable();
+            $table->time('start_time')->nullable();
             $table->date('end_date')->nullable();
-            $table->time('end_time', 6)->nullable();
+            $table->time('end_time')->nullable();
             $table->tinyInteger('status')->default(1);
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('created_by')->nullable();
-            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->string('time_status', 255)->nullable();
             $table->timestamps();
         });
     }
