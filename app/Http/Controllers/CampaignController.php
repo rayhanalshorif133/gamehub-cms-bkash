@@ -62,6 +62,7 @@ class CampaignController extends Controller
 
     public function fetch(Request $request, $id)
     {
+        $today = Carbon::today()->toDateString();
         $campaign = Campaign::where('id', $id)
             ->first();
 
@@ -69,8 +70,18 @@ class CampaignController extends Controller
             return $this->respondWithError('Campaign Not Found');
         }
 
+
+
         $campaign->levels = CampaignLevel::where('campaign_id', $id)
             ->orderBy('level_number', 'asc')
+            ->select('*')
+            ->selectRaw("
+                CASE
+                    WHEN start_date <= ? AND end_date >= ?
+                    THEN 1
+                    ELSE 0
+                END as is_active
+                ", [$today, $today])
             ->get();
 
 
@@ -82,6 +93,15 @@ class CampaignController extends Controller
                 $game = Game::select()->where('status', 1)->where('id', $level->game_id)->first();
                 $level->game_title = $game->title;
                 $level->prize = Prize::where('id', $level->prize_id)->with('distributions')->first();
+
+                // $level
+                if ($level->is_active) {
+                    $campaign->game_id =  $level->game_id;
+                    $campaign->banner =  $game->icon;
+                    $campaign->prize_id =  $level->prize_id;
+                    $campaign->game_keyword =  $game->keyword;
+                }
+
             }
         }
 

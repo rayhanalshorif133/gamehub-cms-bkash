@@ -126,7 +126,145 @@
             display: flex;
             justify-content: space-between;
         }
+
+        .level_progress_overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 12px 14px;
+            background: rgba(10, 20, 10, 0.45);
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 5;
+        }
+
+        .level_bar_label {
+            font-size: 10px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .level_nodes {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .level_node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .level_icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid transparent;
+        }
+
+        .level_icon.done {
+            background: radial-gradient(circle at 35% 35%, #ffe066, #f5a623);
+            border-color: #fff;
+            box-shadow: 0 0 0 2px #f5a623, 0 4px 12px rgba(245, 166, 35, 0.6);
+        }
+
+        .level_icon.locked {
+            background: radial-gradient(circle at 35% 35%, #888, #444);
+            border-color: #aaa;
+        }
+
+        .level_icon.boss {
+            background: radial-gradient(circle at 35% 35%, #ff6b6b, #c0392b);
+            border-color: #fff;
+            width: 50px;
+            height: 50px;
+            font-size: 22px;
+            box-shadow: 0 0 0 2px #e74c3c, 0 4px 14px rgba(231, 76, 60, 0.7);
+        }
+
+        .level_connector {
+            height: 5px;
+            width: 36px;
+            margin-bottom: 16px;
+            border-radius: 3px;
+            flex-shrink: 0;
+        }
+
+        .level_connector.done {
+            background: linear-gradient(90deg, #f5a623, #ffe066);
+        }
+
+        .level_connector.locked {
+            background: #555;
+        }
+
+        .level_name {
+            font-size: 9px;
+            font-weight: 800;
+            margin-top: 4px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .level_name.done {
+            color: #ffe066;
+        }
+
+        .level_name.locked {
+            color: #aaa;
+        }
+
+        .level_name.boss {
+            color: #ff9999;
+        }
+
+        .boss_badge {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #c0392b;
+            color: #fff;
+            font-size: 7px;
+            font-weight: 900;
+            padding: 2px 6px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 2px #f5a623, 0 4px 12px rgba(245, 166, 35, 0.6);
+            }
+
+            50% {
+                box-shadow: 0 0 0 4px #f5a623, 0 4px 18px rgba(245, 166, 35, 0.9);
+            }
+        }
     </style>
+
+
+
+
+
     <?php if(!Auth::check()): ?>
         <div class="main_logo">
             <img class="logo_image" src="./images/logo.png" />
@@ -157,6 +295,7 @@
                                             <div class="image-container">
                                                 <img src="<?php echo e(asset($campaign->banner)); ?>" alt="<?php echo e($campaign->name); ?>"
                                                     class="d-block w-100">
+                                                
                                                 <div class="gift_announcement_card">
                                                     <p>মোট পুরস্কার ৳ <?php echo e($campaign->gift_amount); ?></p>
                                                 </div>
@@ -191,7 +330,8 @@
                                             </div>
                                             <?php if($campaign->block): ?>
                                                 <div class="user_block_msg">
-                                                    <span class="black_msg_close_btn" data-campid="<?php echo e($campaign->id); ?>">&times;</span>
+                                                    <span class="black_msg_close_btn"
+                                                        data-campid="<?php echo e($campaign->id); ?>">&times;</span>
                                                     <p><?php echo e($campaign->block->message); ?></p>
                                                 </div>
                                             <?php endif; ?>
@@ -296,8 +436,8 @@
                             </li>
                             <li class="nav-item">
                                 <?php if(Auth::check()): ?>
-                                    <a class="nav-link <?php if($type == 'account'): ?> active <?php endif; ?>" aria-current="page"
-                                        href="<?php echo e(route('account')); ?>">
+                                    <a class="nav-link <?php if($type == 'account'): ?> active <?php endif; ?>"
+                                        aria-current="page" href="<?php echo e(route('account')); ?>">
                                         <i class="fas fa-user fa-2x"></i>
                                     </a>
                                 <?php else: ?>

@@ -48,7 +48,48 @@
             border-radius: 10px 0 0 10px;
         }
 
-        .carousel-control-prev, .carousel-control-next {
+        .user_block_msg {
+            position: absolute;
+            bottom: 40%;
+            left: 5%;
+            background: #ff1c1c;
+            margin: auto;
+            text-align: center;
+            width: 90%;
+            border-top: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            margin: auto;
+            font-size: 14px;
+            padding: 10px;
+            color: #fff;
+        }
+
+        .user_block_msg .black_msg_close_btn {
+            position: absolute;
+            top: -5px;
+            right: -2px;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+            background: #fff;
+            color: black;
+            border-radius: 50%;
+            height: 24px;
+            width: 24px;
+        }
+
+        .user_block_msg .black_msg_close_btn:hover {
+            color: #eeeeee;
+            transform: scale(1.1);
+        }
+
+
+
+        .carousel-control-prev,
+        .carousel-control-next {
             width: 35px;
             height: 35px;
             top: 50%;
@@ -58,6 +99,34 @@
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+
+        .active_boost_container {
+            position: absolute;
+            top: 25px;
+            right: 0px;
+            background: #ff0000;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .active_boost_container i {
+            font-size: 11px;
+            margin: 0 3px;
+        }
+
+        .active_boost_container span {
+            font-size: 12px;
+            margin: 3px 0;
+        }
+
+        .btn_container {
+            display: flex;
+            justify-content: space-between;
         }
     </style>
     @if (!Auth::check())
@@ -78,13 +147,15 @@
                                         <div class="carousel-item {{ $key == 0 ? 'active' : '' }}">
                                             @if (Auth::check())
                                                 <div class="game-card gameDetailsCampaignModal"
-                                                    data-campid="{{ $campaign->id }}">
+                                                    data-campid="{{ $campaign->id }}"
+                                                    style="background: linear-gradient(135deg, #fce4ec 0%, {{ $campaign->bg_color }} 100%)">
                                                 @else
                                                     <div class="game-card" data-toggle="modal" data-target="#loginModel">
                                             @endif
                                             <div class="game_card_text">
                                                 <h1>Play & Win</h1>
                                                 <h2>{{ $campaign->name }}</h2>
+                                                <h2>{{ $campaign->hasLevel }}</h2>
                                             </div>
                                             <div class="image-container">
                                                 <img src="{{ asset($campaign->banner) }}" alt="{{ $campaign->name }}"
@@ -92,12 +163,22 @@
                                                 <div class="gift_announcement_card">
                                                     <p>মোট পুরস্কার ৳ {{ $campaign->gift_amount }}</p>
                                                 </div>
+                                                <div class="active_boost_container">
+                                                    <i class="fas fa-user"></i>
+                                                    <span>{{ $campaign->count_player }}</span>
+                                                </div>
+
+
                                             </div>
                                             <div class="game_card_footer mb-3">
                                                 @if (Auth::check() && isset($campaign->has_charge_log) && $campaign->has_charge_log)
                                                     <button>Play Now</button>
                                                 @else
-                                                    <button>{{ $campaign->amount }} TK</button>
+                                                    <div class="btn_container">
+                                                        <button>{{ $campaign->amount }} TK</button>
+                                                        <button class="mt-1 trial_play" style="background: #495057">Trial
+                                                            Play</button>
+                                                    </div>
                                                 @endif
 
                                                 <div class="game_card_footer_time">
@@ -109,20 +190,29 @@
                                                     </p>
                                                 </div>
                                             </div>
+                                            @if ($campaign->block)
+                                                <div class="user_block_msg">
+                                                    <span class="black_msg_close_btn" data-campid="{{ $campaign->id }}">&times;</span>
+                                                    <p>{{ $campaign->block->message }}</p>
+                                                </div>
+                                            @endif
+
                                         </div>
                                 </div>
                                 @endforeach
                             </div>
 
                             {{-- Slider Controls --}}
-                            <button class="carousel-control-prev" type="button" data-bs-target="#campaignSlider"
-                                data-bs-slide="prev">
-                                <i class="fa-solid fa-chevron-left" style="color: #ffffff; font-size: 24px;"></i>
-                            </button>
-                            <button class="carousel-control-next" type="button" data-bs-target="#campaignSlider"
-                                data-bs-slide="next">
-                                <i class="fa-solid fa-chevron-right" style="color: #ffffff; font-size: 24px;"></i>
-                            </button>
+                            @if (count($campaigns) > 1)
+                                <button class="carousel-control-prev" type="button" data-bs-target="#campaignSlider"
+                                    data-bs-slide="prev">
+                                    <i class="fa-solid fa-chevron-left" style="color: #ffffff; font-size: 24px;"></i>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#campaignSlider"
+                                    data-bs-slide="next">
+                                    <i class="fa-solid fa-chevron-right" style="color: #ffffff; font-size: 24px;"></i>
+                                </button>
+                            @endif
                         </div>
 
                     </div>
@@ -179,7 +269,6 @@
         </div>
 
     </section>
-
 @endsection
 
 @section('footerPart')
@@ -208,8 +297,8 @@
                             </li>
                             <li class="nav-item">
                                 @if (Auth::check())
-                                    <a class="nav-link @if ($type == 'account') active @endif"
-                                        aria-current="page" href="{{ route('account') }}">
+                                    <a class="nav-link @if ($type == 'account') active @endif" aria-current="page"
+                                        href="{{ route('account') }}">
                                         <i class="fas fa-user fa-2x"></i>
                                     </a>
                                 @else

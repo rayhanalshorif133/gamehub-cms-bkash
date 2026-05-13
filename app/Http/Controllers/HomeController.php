@@ -84,7 +84,9 @@ class HomeController extends Controller
 
                 $today = Carbon::today()->toDateString();
 
-
+                $campaign->hasLevel = false;
+                $levelCount = CampaignLevel::where('campaign_id', $campaign->id)->count();
+                $campaign->hasLevel = $levelCount > 1? true : false;
                 $campaignLevel = CampaignLevel::where('campaign_id', $campaign->id)
                     ->where('start_date', '<=', $today)
                     ->where('end_date', '>=', $today)
